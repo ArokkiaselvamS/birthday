@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Happy Birthday — A Private Cinematic Experience
 
 A premium, scroll-driven 3D birthday experience built with React, TypeScript,
@@ -121,3 +122,6 @@ Post-processing (bloom / depth of field) is approximated with emissive
 materials, additive-blended sprites and CSS text glow rather than a real
 `EffectComposer` pipeline, to keep the dependency footprint small — add
 `postprocessing` or `@react-three/postprocessing` if you want true bloom.
+=======
+# birthday
+>>>>>>> 8e245af90ec6a6d2e29d19b625ad2f90e81db81d

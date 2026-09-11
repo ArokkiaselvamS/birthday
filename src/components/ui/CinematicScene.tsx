@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-import { experienceStore } from "../../store/experienceStore";
 
 /**
  * Scene 1 — Cinematic "A SPECIAL DAY / FOR YOU" intro.
@@ -21,7 +20,6 @@ const PHASE_GAP = 700;  // pause before second line
 const PHASE_FOR = 1400; // "FOR"
 const PHASE_YOU = 1600; // "YOU"
 const PHASE_HOLD = 900; // settle
-const TOTAL_ANIM_MS = PHASE_A + PHASE_SPECIAL + PHASE_DAY + PHASE_GAP + PHASE_FOR + PHASE_YOU + PHASE_HOLD;
 
 export function CinematicScene({ entered }: CinematicSceneProps) {
   const wrapperRef = useRef<HTMLDivElement>(null);
