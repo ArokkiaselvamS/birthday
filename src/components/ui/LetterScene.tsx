@@ -129,6 +129,9 @@ export function LetterScene() {
           start: "top top",
           end: "bottom bottom",
           scrub: 0.8,
+          onUpdate: (self) => {
+            experienceStore.setScene3Completed(self.progress >= 0.99);
+          },
         },
       });
 

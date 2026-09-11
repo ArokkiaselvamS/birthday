@@ -1057,3 +1057,492 @@
   .ls-parallax-stage { transition: none; }
   .ls-photo-wrap { transition: none; }
 }
+
+
+/* ==========================================================================
+   Scene 4 - Premium Horizontal Video Experience
+   ========================================================================== */
+
+.s4-section {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(32px, 6vh, 80px) clamp(16px, 4vw, 48px);
+  background: #030712;
+  overflow: hidden;
+  box-sizing: border-box;
+  z-index: 15;
+}
+
+.s4-glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: clamp(300px, 80vw, 1200px);
+  height: clamp(260px, 70vh, 800px);
+  background: radial-gradient(
+    ellipse at center,
+    rgba(22, 45, 84, 0.35) 0%,
+    rgba(10, 24, 48, 0.18) 50%,
+    transparent 75%
+  );
+  pointer-events: none;
+  z-index: 0;
+}
+
+.s4-vignette {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse at center,
+    transparent 50%,
+    rgba(2, 4, 10, 0.85) 100%
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+
+.s4-container {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.s4-video-frame {
+  position: relative;
+  width: 100%;
+  border-radius: clamp(12px, 1.8vw, 20px);
+  overflow: hidden;
+  background: #000;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow:
+    0 0 0 1px rgba(201, 164, 92, 0.12),
+    0 20px 60px rgba(0, 0, 0, 0.8),
+    0 0 80px rgba(26, 60, 115, 0.2);
+}
+
+.s4-video {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 848 / 478;
+  object-fit: cover;
+  background: #000;
+}
+
+.s4-unmute-btn {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: 9999px;
+  background: rgba(10, 15, 28, 0.78);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(201, 164, 92, 0.35);
+  color: #f2ede2;
+  font-family: "Cormorant SC", Georgia, serif;
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  z-index: 10;
+  transition: all 200ms ease;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+
+.s4-unmute-btn:hover {
+  background: rgba(20, 30, 55, 0.9);
+  border-color: rgba(201, 164, 92, 0.7);
+  transform: scale(1.04);
+}
+
+.s4-replay-pill {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 16px;
+  border-radius: 9999px;
+  background: rgba(10, 15, 28, 0.75);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(201, 164, 92, 0.3);
+  color: #f2ede2;
+  font-family: ui-sans-serif, system-ui, sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  z-index: 10;
+  transition: all 200ms ease;
+}
+
+.s4-replay-pill:hover {
+  background: rgba(20, 30, 55, 0.9);
+  border-color: rgba(201, 164, 92, 0.6);
+  transform: scale(1.05);
+}
+
+@media (max-width: 768px) {
+  .s4-section {
+    padding: 32px 14px;
+    min-height: 80vh;
+  }
+  .s4-video-frame {
+    border-radius: 12px;
+  }
+}
+
+
+/* ==========================================================================
+   Scene 5 - Grand Finale: Snowfall & Two-Column Wish + Portrait
+   ========================================================================== */
+
+.s5-section {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(40px, 8vh, 100px) clamp(20px, 5vw, 64px);
+  background: radial-gradient(
+    ellipse 90% 80% at 50% 40%,
+    #070d1a 0%,
+    #04070f 50%,
+    #020408 100%
+  );
+  overflow: hidden;
+  box-sizing: border-box;
+  z-index: 16;
+}
+
+/* ── Falling Snowflakes (Pure GPU CSS, behind content) ── */
+.s5-snowfall {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 0;
+}
+
+.s5-snowflake {
+  position: absolute;
+  top: -20px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #ffffff 40%, rgba(220, 235, 255, 0.7) 100%);
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.8), 0 0 16px rgba(180, 210, 255, 0.4);
+  animation-name: s5-fall, s5-sway;
+  animation-timing-function: linear, ease-in-out;
+  animation-iteration-count: infinite, infinite;
+}
+
+@keyframes s5-fall {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(115vh);
+  }
+}
+
+@keyframes s5-sway {
+  0%, 100% {
+    margin-left: 0;
+  }
+  50% {
+    margin-left: 28px;
+  }
+}
+
+/* ── Ambient Glows & Vignette ── */
+.s5-ambient-glow {
+  position: absolute;
+  top: 45%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: clamp(340px, 75vw, 1100px);
+  height: clamp(300px, 70vh, 850px);
+  background: radial-gradient(
+    ellipse at 40% 45%,
+    rgba(35, 65, 120, 0.28) 0%,
+    rgba(201, 164, 92, 0.12) 38%,
+    transparent 70%
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+
+.s5-vignette {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse at center,
+    transparent 55%,
+    rgba(2, 4, 8, 0.82) 100%
+  );
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* ── Container & Grid Layout ── */
+.s5-container {
+  position: relative;
+  z-index: 3;
+  width: 100%;
+  max-width: 1240px;
+  margin: 0 auto;
+}
+
+.s5-grid {
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  align-items: center;
+  gap: clamp(32px, 5vw, 72px);
+}
+
+/* ── LEFT COLUMN — Typography & Message ── */
+.s5-col-left {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+}
+
+.s5-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  border-radius: 9999px;
+  background: rgba(201, 164, 92, 0.08);
+  border: 1px solid rgba(201, 164, 92, 0.32);
+  color: #c9a45c;
+  font-family: "Cormorant SC", Georgia, serif;
+  font-size: clamp(10px, 1vw, 12px);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  margin-bottom: clamp(16px, 2.5vh, 28px);
+}
+
+.s5-badge-sparkle {
+  font-size: 11px;
+  color: #e5c888;
+}
+
+.s5-title-group {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(6px, 1.2vh, 14px);
+}
+
+/* Line 1: WISH YOU MANY MORE */
+.s5-text-line1 {
+  font-family: "Cormorant SC", "Playfair Display", Georgia, serif;
+  font-size: clamp(26px, 4.2vw, 56px);
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  line-height: 1.15;
+  color: #e6edf8;
+  text-shadow: 0 2px 24px rgba(100, 160, 255, 0.18);
+}
+
+/* Line 2: HAPPY BIRTHDAY TO YOU */
+.s5-text-line2 {
+  font-family: "Playfair Display", "Cormorant Garamond", Georgia, serif;
+  font-size: clamp(30px, 4.8vw, 64px);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  line-height: 1.15;
+  background: linear-gradient(135deg, #ffffff 0%, #f7e7c4 40%, #c9a45c 80%, #a87f32 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  filter: drop-shadow(0 4px 30px rgba(201, 164, 92, 0.32));
+}
+
+/* Elegant divider */
+.s5-accent-divider {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  max-width: 440px;
+  margin: clamp(18px, 2.8vh, 32px) 0 clamp(14px, 2vh, 24px) 0;
+}
+
+.s5-divider-line {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(201, 164, 92, 0.6) 0%, rgba(201, 164, 92, 0.1) 100%);
+}
+
+.s5-col-left .s5-accent-divider .s5-divider-line:first-child {
+  background: linear-gradient(270deg, rgba(201, 164, 92, 0.6) 0%, rgba(201, 164, 92, 0.1) 100%);
+}
+
+.s5-divider-heart {
+  font-family: "Playfair Display", serif;
+  color: #c9a45c;
+  font-size: clamp(15px, 1.8vw, 20px);
+}
+
+.s5-celebration-tagline {
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: clamp(15px, 1.6vw, 20px);
+  font-style: italic;
+  font-weight: 300;
+  line-height: 1.6;
+  color: rgba(242, 237, 226, 0.78);
+  margin: 0;
+  max-width: 520px;
+}
+
+/* ── RIGHT COLUMN — Uploaded Portrait Card ── */
+.s5-col-right {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.s5-portrait-card {
+  position: relative;
+  width: 100%;
+  max-width: 420px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.s5-portrait-halo {
+  position: absolute;
+  inset: -16px;
+  border-radius: 28px;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(201, 164, 92, 0.22) 0%,
+    rgba(60, 110, 200, 0.15) 50%,
+    transparent 75%
+  );
+  filter: blur(20px);
+  z-index: 0;
+  pointer-events: none;
+}
+
+.s5-portrait-frame {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  border-radius: clamp(18px, 2.2vw, 28px);
+  overflow: hidden;
+  background: linear-gradient(165deg, rgba(255, 255, 255, 0.08) 0%, rgba(10, 18, 36, 0.75) 100%);
+  border: 1.5px solid rgba(201, 164, 92, 0.45);
+  box-shadow:
+    0 24px 60px rgba(0, 0, 0, 0.75),
+    0 0 50px rgba(201, 164, 92, 0.16),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px;
+}
+
+.s5-portrait-img {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 560px;
+  object-fit: contain;
+  border-radius: clamp(12px, 1.6vw, 20px);
+  transition: transform 600ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.s5-portrait-card:hover .s5-portrait-img {
+  transform: scale(1.02);
+}
+
+.s5-portrait-footer {
+  position: relative;
+  z-index: 2;
+  margin-top: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.s5-portrait-dot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: #c9a45c;
+  box-shadow: 0 0 6px #c9a45c;
+}
+
+.s5-portrait-subtext {
+  font-family: "Cormorant SC", Georgia, serif;
+  font-size: 11px;
+  letter-spacing: 0.25em;
+  color: rgba(242, 237, 226, 0.68);
+  text-transform: uppercase;
+}
+
+/* ── Mobile Responsive Stacking ── */
+@media (max-width: 900px) {
+  .s5-section {
+    padding: 60px 20px 80px 20px;
+    min-height: auto;
+  }
+
+  .s5-grid {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+
+  .s5-col-left {
+    align-items: center;
+    text-align: center;
+  }
+
+  .s5-badge {
+    margin-bottom: 18px;
+  }
+
+  .s5-accent-divider {
+    justify-content: center;
+  }
+
+  .s5-celebration-tagline {
+    text-align: center;
+  }
+
+  .s5-col-right {
+    justify-content: center;
+  }
+
+  .s5-portrait-card {
+    max-width: 320px;
+  }
+
+  .s5-portrait-img {
+    max-height: 420px;
+  }
+}

@@ -28,6 +28,10 @@ class ExperienceStore {
   micActive = false;
   /** True once the Scene 2 video has finished playing (or hard-capped at MAX_PLAY_TIME). */
   videoEnded = false;
+  /** True once Scene 3 letter animation has reached 100% completion. */
+  scene3Completed = false;
+  /** True once Scene 4 video (video1.mp4) finishes playing to its natural end. */
+  horizontalVideoEnded = false;
   candles: CandleState[] = Array.from({ length: birthdayConfig.candleCount }, () => ({
     lit: false,
     extinguishing: false,
@@ -80,6 +84,22 @@ class ExperienceStore {
     }
   }
   getVideoEnded = () => this.videoEnded;
+
+  setScene3Completed(completed: boolean) {
+    if (completed !== this.scene3Completed) {
+      this.scene3Completed = completed;
+      this.notify();
+    }
+  }
+  getScene3Completed = () => this.scene3Completed;
+
+  setHorizontalVideoEnded(ended: boolean) {
+    if (ended !== this.horizontalVideoEnded) {
+      this.horizontalVideoEnded = ended;
+      this.notify();
+    }
+  }
+  getHorizontalVideoEnded = () => this.horizontalVideoEnded;
 
   setMicActive(active: boolean) {
     this.micActive = active;

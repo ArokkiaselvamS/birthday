@@ -6,6 +6,8 @@ import { LoadingScreen } from "./components/ui/LoadingScreen";
 import { SoundControl } from "./components/ui/SoundControl";
 import { LetterScene } from "./components/ui/LetterScene";
 import { VideoOverlay } from "./components/ui/VideoOverlay";
+import { HorizontalVideoScene } from "./components/ui/HorizontalVideoScene";
+import { FinaleScene } from "./components/ui/FinaleScene";
 import { experienceStore } from "./store/experienceStore";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -36,6 +38,11 @@ export default function App() {
 
   const onVideoRef = useCallback((el: HTMLVideoElement | null) => {
     videoElRef.current = el;
+  }, []);
+
+  const scene4VideoRef = useRef<HTMLVideoElement | null>(null);
+  const onScene4VideoRef = useCallback((el: HTMLVideoElement | null) => {
+    scene4VideoRef.current = el;
   }, []);
 
   // Subscribe to videoEnded — gates LetterScene rendering.
@@ -171,7 +178,13 @@ export default function App() {
       {/* Scene 3 comes AFTER the spacer — user must scroll through Scene 1/2 first.
           Only rendered after the video has finished, so the user cannot access
           Scene 3 before the 13-second video completes. */}
-      {entered && videoEnded && <LetterScene />}
+      {entered && videoEnded && (
+        <>
+          <LetterScene />
+          <HorizontalVideoScene onVideoRef={onScene4VideoRef} />
+          <FinaleScene />
+        </>
+      )}
     </>
   );
 }
