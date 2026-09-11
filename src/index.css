@@ -1546,3 +1546,192 @@
     max-height: 420px;
   }
 }
+
+
+/* ==========================================================================
+   Scene 6 - Minimal Elegant Cinematic Closing Scene
+   ========================================================================== */
+
+.s6-section {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(48px, 10vh, 110px) clamp(20px, 5vw, 64px);
+  background: radial-gradient(
+    ellipse 85% 75% at 50% 50%,
+    #080c16 0%,
+    #04060c 55%,
+    #020306 100%
+  );
+  overflow: hidden;
+  box-sizing: border-box;
+  z-index: 17;
+}
+
+/* Ambient warm spotlight */
+.s6-ambient-glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: clamp(320px, 65vw, 950px);
+  height: clamp(320px, 65vh, 850px);
+  background: radial-gradient(
+    ellipse at center,
+    rgba(215, 140, 50, 0.18) 0%,
+    rgba(201, 164, 92, 0.10) 35%,
+    rgba(20, 35, 65, 0.08) 60%,
+    transparent 75%
+  );
+  pointer-events: none;
+  z-index: 0;
+}
+
+.s6-vignette {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse at center,
+    transparent 50%,
+    rgba(2, 3, 6, 0.88) 100%
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Minimal floating ambient dust */
+.s6-particles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.s6-particle {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 230, 180, 0.55);
+  box-shadow: 0 0 6px rgba(255, 200, 120, 0.6);
+  animation: s6-float ease-in-out infinite alternate;
+}
+
+@keyframes s6-float {
+  0% {
+    transform: translateY(0px) scale(0.8);
+    opacity: 0.2;
+  }
+  100% {
+    transform: translateY(-24px) scale(1.2);
+    opacity: 0.7;
+  }
+}
+
+/* Centered Container */
+.s6-container {
+  position: relative;
+  z-index: 3;
+  width: 100%;
+  max-width: 680px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+/* Centered Image Frame */
+.s6-image-frame {
+  position: relative;
+  width: 100%;
+  max-width: clamp(280px, 44vw, 520px);
+  border-radius: clamp(16px, 2.2vw, 24px);
+  overflow: hidden;
+  background: #060912;
+  border: 1px solid rgba(201, 164, 92, 0.38);
+  box-shadow:
+    0 24px 70px rgba(0, 0, 0, 0.85),
+    0 0 50px rgba(215, 140, 50, 0.16),
+    0 0 1px 1px rgba(255, 255, 255, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px;
+}
+
+.s6-image-halo {
+  position: absolute;
+  inset: -12px;
+  border-radius: 30px;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(215, 140, 50, 0.24) 0%,
+    rgba(201, 164, 92, 0.12) 45%,
+    transparent 70%
+  );
+  filter: blur(18px);
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* Centered Image */
+.s6-image {
+  position: relative;
+  z-index: 1;
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1 / 0.9;
+  object-fit: cover;
+  border-radius: clamp(12px, 1.8vw, 20px);
+}
+
+/* Text Wrapper Directly Below Image */
+.s6-text-wrap {
+  margin-top: clamp(20px, 3.2vh, 36px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* “Wishes from Arokkia Creation” */
+.s6-signature-text {
+  margin: 0;
+  font-family: "Cormorant Garamond", "Playfair Display", Georgia, serif;
+  font-size: clamp(19px, 2.8vw, 34px);
+  font-weight: 500;
+  font-style: italic;
+  letter-spacing: 0.05em;
+  color: #f7e7c4;
+  background: linear-gradient(135deg, #ffffff 0%, #faecd2 45%, #c9a45c 85%, #a87f32 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  filter: drop-shadow(0 2px 20px rgba(201, 164, 92, 0.3));
+  white-space: nowrap;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 640px) {
+  .s6-section {
+    padding: 60px 18px;
+    min-height: 90vh;
+  }
+  .s6-image-frame {
+    max-width: 88vw;
+    border-radius: 16px;
+    padding: 5px;
+  }
+  .s6-image {
+    border-radius: 12px;
+  }
+  .s6-text-wrap {
+    margin-top: 22px;
+  }
+  .s6-signature-text {
+    font-size: clamp(17px, 5.2vw, 22px);
+    white-space: normal;
+  }
+}

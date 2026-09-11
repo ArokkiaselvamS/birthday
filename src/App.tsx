@@ -8,6 +8,7 @@ import { LetterScene } from "./components/ui/LetterScene";
 import { VideoOverlay } from "./components/ui/VideoOverlay";
 import { HorizontalVideoScene } from "./components/ui/HorizontalVideoScene";
 import { FinaleScene } from "./components/ui/FinaleScene";
+import { SignatureScene } from "./components/ui/SignatureScene";
 import { experienceStore } from "./store/experienceStore";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -183,6 +184,7 @@ export default function App() {
           <LetterScene />
           <HorizontalVideoScene onVideoRef={onScene4VideoRef} />
           <FinaleScene />
+          <SignatureScene />
         </>
       )}
     </>
