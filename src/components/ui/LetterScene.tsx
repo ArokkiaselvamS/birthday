@@ -1,7 +1,7 @@
-﻿import gsap from "gsap";
+import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useEffect, useRef, useSyncExternalStore } from "react";
-import { birthdayConfig } from "../../config/birthday";
+// Scene 3 config
 import { experienceStore } from "../../store/experienceStore";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -490,8 +490,7 @@ export function LetterScene() {
             <div ref={para3Ref} className="ls-paragraph">
               I hope this year gives you more reasons to smile, more moments to be proud
               of, and all the love and joy you truly deserve. Stay the same kind, caring,
-              and incredible person you are — the world is lucky to have you,{" "}
-              <strong style={{ fontWeight: 600, color: "#172033" }}>{birthdayConfig.name}</strong>!
+              and incredible person you are — the world is lucky to have you!
             </div>
 
             <div className="ls-divider-line" />
