@@ -1,0 +1,1059 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Cormorant+SC:wght@300;400&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html,
+  body,
+  #root {
+    height: 100%;
+  }
+  body {
+    background: #03040a;
+    color: #f2ede2;
+    overflow-x: hidden;
+    -webkit-tap-highlight-color: transparent;
+    cursor: default;
+  }
+  ::selection {
+    background: rgba(216, 184, 119, 0.35);
+  }
+}
+
+@keyframes breathe {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.7;
+  }
+  50% {
+    transform: scale(2.4);
+    opacity: 1;
+  }
+}
+.loading-particle {
+  width: 6px;
+  height: 6px;
+  border-radius: 9999px;
+  background: #ffb469;
+  box-shadow:
+    0 0 20px 6px rgba(255, 180, 105, 0.55),
+    0 0 60px 20px rgba(255, 180, 105, 0.18);
+  animation: breathe 3.4s ease-in-out infinite;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.enter-btn-appear {
+  animation: fadeInUp 0.9s ease forwards;
+}
+
+.reveal-word-gradient {
+  background: linear-gradient(180deg, #fff6e6 0%, #e9d5a3 45%, #a9843f 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  filter: drop-shadow(0 0 40px rgba(216, 184, 119, 0.35));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .loading-particle {
+    animation-duration: 6s;
+  }
+}
+
+/* ─── Scene 2: Birthday Video ──────────────────────────────────────────────── */
+
+/**
+ * Full-screen fixed overlay that replaces the 3D canvas after the gift opens.
+ * Uses flexbox to center the <video> both axes on every viewport.
+ */
+.video-scene {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #000;
+  overflow: hidden;
+  padding: 16px;
+  box-sizing: border-box;
+}
+
+/**
+ * The <video> element.
+ *
+ * Mobile-first: fits 92% of the viewport width, auto height keeps
+ * the aspect ratio intact. max-height clamps it to 82 vh so it is
+ * always fully visible without vertical scroll.
+ *
+ * object-fit: contain is the final safety net — it never stretches.
+ */
+.birthday-video {
+  display: block;
+  /* Mobile base (320 px → 480 px) */
+  width: 92vw;
+  max-width: 92vw;
+  height: auto;
+  max-height: 82vh;
+  object-fit: contain;
+  margin: 0 auto;
+  /* Subtle rounded corners + warm glow */
+  border-radius: 12px;
+  box-shadow:
+    0 0 0 1px rgba(255, 200, 140, 0.12),
+    0 8px 48px rgba(0, 0, 0, 0.7),
+    0 0 60px rgba(255, 180, 100, 0.08);
+}
+
+/* Small-to-mid mobile (481 px – 767 px) */
+@media (min-width: 481px) {
+  .birthday-video {
+    width: min(88vw, 480px);
+    max-width: min(88vw, 480px);
+    max-height: 84vh;
+  }
+}
+
+/* Tablet (768 px – 1023 px) */
+@media (min-width: 768px) {
+  .birthday-video {
+    width: min(80vw, 640px);
+    max-width: min(80vw, 640px);
+    max-height: 85vh;
+    border-radius: 16px;
+  }
+}
+
+/* Desktop (1024 px +) */
+@media (min-width: 1024px) {
+  .birthday-video {
+    width: min(72vw, 820px);
+    max-width: min(72vw, 820px);
+    max-height: 88vh;
+    border-radius: 18px;
+  }
+}
+
+/* Extra safeguard: very small screens (< 360 px) */
+@media (max-width: 359px) {
+  .birthday-video {
+    width: 96vw;
+    max-width: 96vw;
+    border-radius: 8px;
+  }
+}
+
+/* video-player: inline-flex column wrapping <video> + vc-bar */
+.video-player {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: stretch;
+  width: 92vw;
+  max-width: 92vw;
+}
+@media (min-width: 481px) {
+  .video-player { width: min(88vw, 480px); max-width: min(88vw, 480px); }
+}
+@media (min-width: 768px) {
+  .video-player { width: min(80vw, 640px); max-width: min(80vw, 640px); }
+}
+@media (min-width: 1024px) {
+  .video-player { width: min(72vw, 820px); max-width: min(72vw, 820px); }
+}
+@media (max-width: 359px) {
+  .video-player { width: 96vw; max-width: 96vw; }
+}
+
+/* Custom Controls Bar */
+.vc-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  margin-top: 10px;
+  border-radius: 10px;
+  background: rgba(10, 8, 4, 0.72);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 200, 140, 0.13);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 240ms ease, transform 240ms ease;
+  pointer-events: none;
+}
+.vc-bar--visible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+/* Play / Pause / Replay button */
+.vc-playbtn {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(255, 200, 140, 0.35);
+  background: rgba(255, 180, 100, 0.12);
+  color: #f2ede2;
+  cursor: pointer;
+  transition: background 180ms ease, border-color 180ms ease, transform 120ms ease;
+}
+.vc-playbtn:hover {
+  background: rgba(255, 180, 100, 0.25);
+  border-color: rgba(255, 200, 140, 0.65);
+  transform: scale(1.08);
+}
+.vc-playbtn:active { transform: scale(0.94); }
+
+/* Time display */
+.vc-time {
+  flex-shrink: 0;
+  font-family: ui-monospace, "Fira Code", monospace;
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  color: rgba(242, 237, 226, 0.55);
+  white-space: nowrap;
+  user-select: none;
+}
+
+/* Progress bar track + fill + thumb */
+.vc-progress {
+  flex: 1;
+  min-width: 0;
+  padding: 10px 0;
+  cursor: pointer;
+  user-select: none;
+  touch-action: none;
+}
+.vc-progress__track {
+  position: relative;
+  height: 3px;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.14);
+}
+.vc-progress__fill {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  border-radius: 3px;
+  background: linear-gradient(90deg, #d8b877 0%, #ffcf80 100%);
+  transition: width 80ms linear;
+}
+.vc-progress__thumb {
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background: #ffcf80;
+  box-shadow: 0 0 8px rgba(255, 200, 120, 0.6);
+  transition: left 80ms linear, transform 120ms ease;
+  pointer-events: none;
+}
+.vc-progress:hover .vc-progress__thumb {
+  transform: translate(-50%, -50%) scale(1.25);
+}
+
+/* Mobile touch targets */
+@media (max-width: 480px) {
+  .vc-bar { padding: 8px 10px; gap: 8px; border-radius: 8px; }
+  .vc-playbtn { width: 32px; height: 32px; }
+  .vc-time { font-size: 10px; }
+}
+
+/* Cursor tweak: add pointer style to video (click to play/pause) */
+.birthday-video { cursor: pointer; }
+
+
+/* ==========================================================================
+   Scene 1 � Cinematic "A SPECIAL DAY / FOR YOU"
+   ========================================================================== */
+
+
+/* --- Root container -------------------------------------------------------- */
+.cs-root {
+  position: fixed;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(
+    ellipse at 50% 40%,
+    #0f0c18 0%,
+    #06040d 45%,
+    #03040a 100%
+  );
+  overflow: hidden;
+}
+
+/* --- Ambient particles ---------------------------------------------------- */
+@keyframes cs-float {
+  0%, 100% { transform: translateY(0) translateX(0) scale(1);   opacity: 0;   }
+  15%       { opacity: 1; }
+  85%       { opacity: 0.6; }
+  100%      { transform: translateY(-60vh) translateX(calc(var(--drift, 0) * 1px)) scale(0.4); opacity: 0; }
+}
+
+.cs-particles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.cs-particle {
+  --i: 0;
+  --drift: calc((var(--i) - 11) * 14);
+  position: absolute;
+  bottom: -8px;
+  left: calc((var(--i) / 22) * 100%);
+  width: 2px;
+  height: 2px;
+  border-radius: 50%;
+  background: #d8b877;
+  animation: cs-float
+    calc(8s + (var(--i) * 0.55s))
+    calc(var(--i) * 0.45s)
+    ease-in-out
+    infinite;
+  filter: blur(0.5px);
+  box-shadow: 0 0 4px 1px rgba(216, 184, 119, 0.5);
+}
+
+/* Every other particle: cooler colour */
+.cs-particle:nth-child(even) {
+  background: #a899cc;
+  box-shadow: 0 0 4px 1px rgba(168, 153, 204, 0.4);
+  width: 1.5px;
+  height: 1.5px;
+}
+
+/* --- Light rays ------------------------------------------------------------ */
+.cs-rays {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+@keyframes cs-ray-pulse {
+  0%, 100% { opacity: 0.04; }
+  50%       { opacity: 0.12; }
+}
+
+.cs-ray {
+  position: absolute;
+  top: -10%;
+  width: 1px;
+  height: 130%;
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(216, 184, 119, 0.8) 30%,
+    rgba(216, 184, 119, 0.4) 60%,
+    transparent 100%
+  );
+  filter: blur(18px);
+  transform-origin: top center;
+  animation: cs-ray-pulse 6s ease-in-out infinite;
+}
+.cs-ray--1 { left: 35%; transform: rotate(-8deg) scaleX(40); animation-delay: 0s;   opacity: 0.06; }
+.cs-ray--2 { left: 50%; transform: rotate(0deg)  scaleX(55); animation-delay: 2.1s; opacity: 0.08; }
+.cs-ray--3 { left: 65%; transform: rotate(9deg)  scaleX(38); animation-delay: 4.3s; opacity: 0.05; }
+
+/* --- Typography wrapper --------------------------------------------------- */
+.cs-text-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(14px, 2.5vh, 28px);
+  padding: 0 24px;
+  text-align: center;
+}
+
+/* --- Lines ----------------------------------------------------------------- */
+.cs-line {
+  display: flex;
+  align-items: baseline;
+  gap: clamp(10px, 2.5vw, 36px);
+  opacity: 0;
+  transition: opacity 800ms ease;
+}
+.cs-line--visible { opacity: 1; }
+
+/* --- Individual word entrance --------------------------------------------- */
+@keyframes cs-word-in {
+  from {
+    opacity: 0;
+    transform: translateY(22px);
+    filter: blur(8px);
+    letter-spacing: 0.55em;
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+    letter-spacing: var(--ls-final, 0.34em);
+  }
+}
+
+.cs-word {
+  display: inline-block;
+  font-family: "Cormorant SC", "Cormorant Garamond", "Futura", "Century Gothic", "Avenir Next", serif;
+  font-weight: 300;
+  color: transparent;
+  background: linear-gradient(160deg, #fff6e6 0%, #e9d5a3 38%, #c9a86c 70%, #d8b877 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  text-transform: uppercase;
+  letter-spacing: var(--ls-final, 0.34em);
+  opacity: 0;
+  filter: blur(8px);
+  transform: translateY(22px);
+}
+
+.cs-word--in {
+  animation: cs-word-in 1.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Word-specific sizing & spacing */
+.cs-word--a       { font-size: clamp(36px, 7vw, 82px); --ls-final: 0.25em; }
+.cs-word--special { font-size: clamp(42px, 9vw, 108px); --ls-final: 0.36em; animation-delay: 0.04s; }
+.cs-word--day     { font-size: clamp(36px, 7vw, 82px);  --ls-final: 0.25em; animation-delay: 0.08s; }
+.cs-word--for     { font-size: clamp(28px, 5.5vw, 66px); --ls-final: 0.42em; }
+.cs-word--you     { font-size: clamp(58px, 12vw, 148px); --ls-final: 0.3em; animation-delay: 0.06s;
+  background: linear-gradient(150deg, #fff8ee 0%, #ffe0a0 30%, #d8b877 65%, #b8944a 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  font-weight: 400;
+}
+
+/* --- Divider line --------------------------------------------------------- */
+@keyframes cs-div-in {
+  from { transform: scaleX(0); opacity: 0; }
+  to   { transform: scaleX(1); opacity: 1; }
+}
+
+.cs-divider {
+  width: clamp(80px, 20vw, 200px);
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(216,184,119,0.55), transparent);
+  transform: scaleX(0);
+  opacity: 0;
+}
+.cs-divider--in {
+  animation: cs-div-in 1.1s cubic-bezier(0.16, 1, 0.3, 1) 0.2s forwards;
+}
+
+/* --- Light sweep (plays once after full reveal) ----------------------------- */
+@keyframes cs-sweep {
+  0%   { left: -60%; opacity: 0; }
+  10%  { opacity: 1; }
+  90%  { opacity: 0.8; }
+  100% { left: 130%; opacity: 0; }
+}
+
+.cs-sweep {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 55%;
+  pointer-events: none;
+  background: linear-gradient(
+    105deg,
+    transparent 0%,
+    rgba(255, 240, 200, 0.04) 35%,
+    rgba(255, 230, 160, 0.11) 50%,
+    rgba(255, 240, 200, 0.04) 65%,
+    transparent 100%
+  );
+  filter: blur(6px);
+  animation: cs-sweep 2.6s cubic-bezier(0.4, 0, 0.6, 1) 0.2s both;
+}
+
+/* --- Scroll cue ----------------------------------------------------------- */
+@keyframes cs-cue-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0);    }
+}
+@keyframes cs-cue-bob {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(8px); }
+}
+
+.cs-scroll-cue {
+  position: absolute;
+  bottom: clamp(28px, 5vh, 52px);
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  animation: cs-cue-in 1s ease 0.6s both, cs-cue-bob 2.2s ease-in-out 1.8s infinite;
+}
+
+.cs-scroll-cue__line {
+  width: 1px;
+  height: clamp(32px, 5vh, 52px);
+  background: linear-gradient(to bottom, rgba(216,184,119,0.7), transparent);
+}
+
+.cs-scroll-cue__label {
+  font-family: "Futura", "Century Gothic", "Avenir Next", sans-serif;
+  font-size: 9px;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: rgba(216, 184, 119, 0.5);
+}
+
+/* --- Mobile refinements --------------------------------------------------- */
+@media (max-width: 480px) {
+  .cs-word--special { font-size: clamp(34px, 10vw, 54px); }
+  .cs-word--you     { font-size: clamp(52px, 14vw, 80px); }
+  .cs-text-wrap { gap: 10px; }
+}
+
+/* --- Reduced motion -------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  .cs-word--in       { animation-duration: 0.4s; }
+  .cs-particle       { animation-duration: 16s; }
+  .cs-scroll-cue     { animation-name: cs-cue-in; }
+}
+
+
+/* ==========================================================================
+   Scene 3 - Premium Cinematic Birthday Letter
+   ========================================================================== */
+
+/* Section: 700vh provides scroll space for all 8 animation steps */
+.ls-section {
+  position: relative;
+  width: 100%;
+  height: 700vh;
+  z-index: 12;
+}
+
+/* Sticky viewport - pins 100vh frame while 700vh scrolls */
+.ls-sticky {
+  position: sticky;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  z-index: 12;
+  background: #060D1A;
+}
+
+/* Deep cinematic background */
+.ls-bg {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  background: radial-gradient(
+    ellipse 80% 75% at 50% 52%,
+    #0D1E38 0%,
+    #07111F 42%,
+    #030914 100%
+  );
+  z-index: 0;
+}
+
+/* Warm center glow — simulates desk lamp illuminating the letter */
+.ls-glow {
+  position: absolute;
+  top: 46%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 62%;
+  height: 72%;
+  background: radial-gradient(
+    ellipse at 45% 40%,
+    rgba(160, 120, 45, 0.10) 0%,
+    rgba(100, 135, 195, 0.048) 48%,
+    transparent 72%
+  );
+  opacity: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* Cinematic vignette */
+.ls-vignette {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse 86% 80% at 50% 50%,
+    transparent 36%,
+    rgba(3, 9, 20, 0.28) 66%,
+    rgba(3, 9, 20, 0.60) 100%
+  );
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* Atmospheric dust particles */
+.ls-particles {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.ls-particle {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(201, 164, 76, 0.50);
+  animation: ls-particle-float var(--dur, 8s) ease-in-out infinite;
+  animation-delay: var(--delay, 0s);
+}
+
+@keyframes ls-particle-float {
+  0%, 100% { transform: translateY(0) translateX(0); opacity: 0; }
+  12%       { opacity: 0.9; }
+  50%       { transform: translateY(-26px) translateX(9px); opacity: 0.5; }
+  88%       { opacity: 0.8; }
+}
+
+/* Parallax stage - wraps leaves and coffee for mouse-parallax */
+.ls-parallax-stage {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 3;
+  will-change: transform;
+  transition: transform 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* Decorative leaves - top-left botanical */
+.ls-leaves {
+  position: absolute;
+  top: clamp(-45px, -5vh, -15px);
+  left: clamp(-28px, -2.5vw, -8px);
+  width: clamp(170px, 19vw, 310px);
+  height: clamp(190px, 33vh, 390px);
+  opacity: 0;
+  pointer-events: none;
+  filter: blur(0.5px) drop-shadow(0 16px 38px rgba(12, 50, 12, 0.38));
+  animation: ls-leaf-sway 10s ease-in-out infinite;
+  transform-origin: 28% 96%;
+}
+
+@keyframes ls-leaf-sway {
+  0%, 100% { transform: rotate(0deg); }
+  30%       { transform: rotate(0.9deg); }
+  70%       { transform: rotate(-0.6deg); }
+}
+
+/* Coffee cup - top-right */
+.ls-coffee {
+  position: absolute;
+  top: clamp(8px, 1.8vh, 32px);
+  right: clamp(8px, 1.8vw, 38px);
+  width: clamp(76px, 8.5vw, 132px);
+  height: clamp(88px, 11vh, 148px);
+  opacity: 0;
+  pointer-events: none;
+  filter: blur(0.5px) drop-shadow(0 12px 32px rgba(0, 0, 0, 0.65));
+}
+
+/* Polaroid wrapper - handles positioning + parallax */
+.ls-photo-wrap {
+  position: absolute;
+  bottom: clamp(32px, 4.5vh, 65px);
+  left: clamp(16px, 2.2vw, 44px);
+  z-index: 4;
+  pointer-events: auto;
+  transition: transform 1.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* Polaroid inner element - GSAP target for opacity/y/rotate */
+.ls-photo {
+  opacity: 0;
+  filter: drop-shadow(0 12px 36px rgba(0, 0, 0, 0.68));
+  transition: transform 380ms cubic-bezier(0.25, 0.46, 0.45, 0.94), filter 380ms ease;
+  display: block;
+}
+
+.ls-photo:hover {
+  filter: drop-shadow(0 18px 48px rgba(0, 0, 0, 0.72)) !important;
+}
+
+.ls-photo__frame {
+  background: linear-gradient(155deg, #FBF8F3 0%, #F5F0E8 100%);
+  padding: 8px 8px 28px 8px;
+  border-radius: 2px;
+  box-shadow:
+    0 8px 28px rgba(0, 0, 0, 0.52),
+    0 2px 8px rgba(0, 0, 0, 0.28),
+    inset 0 0 0 0.5px rgba(0, 0, 0, 0.05);
+  transform: rotate(-5deg);
+  width: clamp(96px, 10.5vw, 148px);
+}
+
+.ls-photo__image {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1;
+  background: #1a2a4a;
+  overflow: hidden;
+}
+
+.ls-photo__caption {
+  text-align: center;
+  margin-top: 8px;
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: clamp(8px, 0.95vw, 11px);
+  font-style: italic;
+  color: #5a4e3d;
+  letter-spacing: 0.04em;
+}
+
+/* Dark premium leather pad */
+.ls-pad {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: clamp(370px, 66vw, 840px);
+  height: clamp(250px, 52vh, 560px);
+  opacity: 0;
+  z-index: 5;
+  border-radius: 9px;
+  box-shadow:
+    0 55px 130px rgba(0, 0, 0, 0.82),
+    0 28px 60px rgba(0, 0, 0, 0.58),
+    0 0 0 1px rgba(201, 164, 92, 0.11),
+    0 0 0 0.5px rgba(180, 200, 255, 0.05);
+}
+
+.ls-pad__inner {
+  width: 100%;
+  height: 100%;
+  border-radius: 9px;
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(148deg,
+    #0F2040 0%,
+    #0B1C38 22%,
+    #09162E 55%,
+    #070E1E 100%
+  );
+  border: 1px solid rgba(201, 164, 92, 0.14);
+}
+
+/* Leather texture via subtle lines */
+.ls-pad__inner::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 50px,
+    rgba(255,255,255,0.009) 50px,
+    rgba(255,255,255,0.009) 51px
+  );
+  border-radius: inherit;
+}
+
+/* Specular highlight */
+.ls-pad__inner::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(
+    128deg,
+    rgba(255,255,255,0.042) 0%,
+    transparent 44%,
+    rgba(0,0,0,0.09) 100%
+  );
+}
+
+/* Premium cream paper - landscape orientation */
+.ls-paper {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: clamp(300px, 54vw, 700px);
+  height: clamp(210px, 42vh, 470px);
+  opacity: 0;
+  z-index: 6;
+  border-radius: 3px;
+  background: linear-gradient(
+    172deg,
+    #FAF4E6 0%,
+    #F6EEDA 26%,
+    #F3EAD2 55%,
+    #EEE3C6 100%
+  );
+  box-shadow:
+    0 0 0 1px rgba(201, 164, 92, 0.30),
+    0 0 0 0.5px rgba(201, 164, 92, 0.13),
+    0 30px 75px rgba(0, 0, 0, 0.54),
+    0 12px 30px rgba(0, 0, 0, 0.34),
+    inset 0 1px 0 rgba(255, 255, 255, 0.88),
+    inset 0 0 45px rgba(175, 145, 85, 0.058);
+  padding: clamp(16px, 2.6vh, 30px) clamp(20px, 2.8vw, 40px) clamp(14px, 2vh, 26px) clamp(24px, 3.8vw, 50px);
+  box-sizing: border-box;
+}
+
+/* Subtle red margin line */
+.ls-paper::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: clamp(30px, 4.8vw, 52px);
+  width: 1px;
+  background: rgba(180, 65, 65, 0.15);
+}
+
+/* Ruled lines on paper */
+.ls-paper::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 3px;
+  pointer-events: none;
+  background-image: repeating-linear-gradient(
+    transparent,
+    transparent 26px,
+    rgba(100, 140, 200, 0.065) 26px,
+    rgba(100, 140, 200, 0.065) 27px
+  );
+}
+
+/* Premium fountain pen */
+.ls-pen {
+  position: absolute;
+  top: clamp(-14px, -1.8vh, -6px);
+  right: clamp(-34px, -3.2vw, -18px);
+  width: clamp(13px, 1.7vw, 19px);
+  height: clamp(115px, 19vh, 165px);
+  opacity: 0;
+  z-index: 8;
+  pointer-events: none;
+  transform-origin: bottom center;
+  filter: drop-shadow(3px 7px 18px rgba(0, 0, 0, 0.65))
+          drop-shadow(1px 2px 4px rgba(0, 0, 0, 0.40));
+}
+
+/* Pen writing cursor */
+.ls-pen-cursor {
+  position: absolute;
+  left: clamp(18px, 3.2vw, 42px);
+  top: 14%;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #C9A45C;
+  box-shadow:
+    0 0 6px rgba(201, 164, 92, 1.0),
+    0 0 14px rgba(201, 164, 92, 0.55);
+  opacity: 0;
+  z-index: 9;
+  pointer-events: none;
+  animation: ls-cursor-blink 0.5s ease-in-out infinite;
+}
+
+@keyframes ls-cursor-blink {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.07; transform: scale(0.55); }
+}
+
+/* Gold gift icon */
+.ls-gift {
+  position: absolute;
+  right: clamp(9px, 1.5vw, 20px);
+  top: 7%;
+  z-index: 8;
+  pointer-events: auto;
+  cursor: pointer;
+  filter: drop-shadow(0 3px 10px rgba(0, 0, 0, 0.22));
+  transition: filter 280ms ease, transform 280ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.ls-gift:hover {
+  filter: drop-shadow(0 6px 20px rgba(201, 164, 92, 0.65));
+  transform: scale(1.12) translateY(-4px);
+}
+
+/* Paper corner botanical flourishes */
+.ls-corner--tr {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  opacity: 0.38;
+  pointer-events: none;
+  z-index: 7;
+}
+
+.ls-corner--bl {
+  position: absolute;
+  bottom: 10px;
+  left: 12px;
+  opacity: 0.35;
+  pointer-events: none;
+  z-index: 7;
+  transform: rotate(180deg);
+}
+
+/* Letter content layout */
+.ls-letter-content {
+  position: relative;
+  z-index: 7;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+/* "Dear," - italic gold */
+.ls-line--dear {
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: clamp(12px, 1.55vw, 15.5px);
+  font-style: italic;
+  font-weight: 400;
+  color: #B8902E;
+  opacity: 0;
+  margin-bottom: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  letter-spacing: 0.025em;
+}
+
+/* "Happy Birthday! heart" - Playfair Display, premium serif */
+.ls-heading {
+  margin-bottom: clamp(9px, 1.5vh, 16px);
+  overflow: hidden;
+  white-space: nowrap;
+  opacity: 0;
+}
+
+.ls-heading__happy {
+  font-family: "Playfair Display", "Cormorant Garamond", Georgia, serif;
+  font-size: clamp(17px, 2.7vw, 27px);
+  font-weight: 700;
+  color: #172033;
+  letter-spacing: 0.005em;
+  line-height: 1.15;
+}
+
+.ls-heading__heart {
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: clamp(17px, 2.7vw, 27px);
+  color: #C9A45C;
+  font-weight: 400;
+}
+
+/* Body paragraphs */
+.ls-paragraph {
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: clamp(10.5px, 1.35vw, 13.5px);
+  line-height: 1.85;
+  color: #211C0F;
+  margin-bottom: clamp(6px, 1vh, 12px);
+  opacity: 0;
+}
+
+/* Gold divider with flanking lines */
+.ls-divider-line {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: clamp(7px, 1.1vh, 13px) 0;
+}
+
+.ls-divider-line::before {
+  content: "";
+  display: inline-block;
+  width: 18px;
+  height: 1px;
+  background: rgba(201, 164, 92, 0.60);
+  flex-shrink: 0;
+}
+
+.ls-divider-line::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(201, 164, 92, 0.50) 0%, transparent 100%);
+}
+
+/* Closing italic sentence */
+.ls-final-wish {
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: clamp(10px, 1.28vw, 12.5px);
+  line-height: 1.80;
+  color: #2A2018;
+  font-style: italic;
+  opacity: 0;
+  margin-bottom: clamp(5px, 0.8vh, 10px);
+}
+
+/* "WISH YOU A GREAT YEAR AHEAD heart" */
+.ls-final-tagline {
+  font-family: "Cormorant SC", "Cormorant Garamond", Georgia, serif;
+  font-size: clamp(7px, 0.88vw, 9px);
+  font-weight: 400;
+  letter-spacing: 0.22em;
+  color: #C9A45C;
+  opacity: 0;
+  text-transform: uppercase;
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+  .ls-leaves { width: 120px; height: 140px; }
+  .ls-coffee { width: 62px; height: 72px; top: 8px; right: 8px; }
+  .ls-photo-wrap { bottom: 24px; left: 10px; }
+  .ls-photo__frame { width: 80px; }
+  .ls-pad   { width: 96vw; height: 80vh; border-radius: 7px; }
+  .ls-paper { width: 86vw; height: 70vh; }
+  .ls-pen   { right: -12px; width: 11px; height: 100px; }
+  .ls-pen-cursor { left: 14px; }
+}
+
+/* Large desktop */
+@media (min-width: 1300px) {
+  .ls-pad   { width: 860px; height: 568px; }
+  .ls-paper { width: 714px; height: 482px; }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .ls-bg, .ls-glow, .ls-leaves, .ls-coffee, .ls-photo,
+  .ls-pad, .ls-paper, .ls-pen, .ls-line--dear, .ls-heading,
+  .ls-paragraph, .ls-final-wish, .ls-final-tagline {
+    opacity: 1 !important;
+    transform: none !important;
+    clip-path: none !important;
+  }
+  .ls-leaves { animation: none; }
+  .ls-pen-cursor { animation: none; opacity: 0; }
+  .ls-particle { animation: none; display: none; }
+  .ls-parallax-stage { transition: none; }
+  .ls-photo-wrap { transition: none; }
+}
